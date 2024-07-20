@@ -5,18 +5,23 @@ package hooks;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import base.DriverInstance;
+import base.PageContext;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.AfterStep;
 import cucumber.api.java.Before;
 import cucumber.api.java.BeforeStep;
 
-public class Hooks extends DriverInstance {
-
+public class Hooks  {
+	PageContext context;
+	public Hooks(PageContext context) {
+		this.context=context;
+	}
 	@BeforeStep
 	public void beforeSteps(Scenario sc) {
 		sc.write("Started- Dhiva");
@@ -33,9 +38,9 @@ public class Hooks extends DriverInstance {
 	public void beforeScenario(Scenario sc) {
 		
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\abc\\Downloads\\driver\\chromedriver-win64\\chromedriver.exe");  
-		driver=new ChromeDriver();
-		driver.get("https://www.cleartrip.ae/flights")
-		;
+		WebDriver driver=new ChromeDriver();
+		context.setDriver(driver);
+		context.getDriver().get("https://www.cleartrip.ae/flights");
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
@@ -46,8 +51,8 @@ public void afterScenario(Scenario sc) {
 		System.out.println("Is Failed:" +failed);
 		
 		if(failed) {
-		byte[] screenshot=((RemoteWebDriver) driver).getScreenshotAs(OutputType.BYTES);
+		byte[] screenshot=((RemoteWebDriver) context.getDriver()).getScreenshotAs(OutputType.BYTES);
 		sc.embed(screenshot, "image/png");}
-	driver.quit();
+		context.getDriver().quit();
 }
 }
