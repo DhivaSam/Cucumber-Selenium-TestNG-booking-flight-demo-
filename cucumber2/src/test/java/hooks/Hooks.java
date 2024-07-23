@@ -37,7 +37,7 @@ public class Hooks  {
 	@Before
 	public void beforeScenario(Scenario sc) {
 		
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\abc\\Downloads\\driver\\chromedriver-win64\\chromedriver.exe");  
+		System.setProperty("webdriver.chrome.driver", "chromedriver directory");  
 		WebDriver driver=new ChromeDriver();
 		context.setDriver(driver);
 		context.getDriver().get("https://www.cleartrip.ae/flights");
